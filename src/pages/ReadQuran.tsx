@@ -52,10 +52,10 @@ const ReadQuran = () => {
       }
     }
 
-    // Simulate loading the initial data
+    // Simulate loading the initial data (could be replaced with actual API fetch)
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 1000);
     
     return () => clearTimeout(timer);
   }, [location.state]);

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Bookmark, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { Bookmark, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Verse } from '@/types/quran';
 import { mockQuranData } from '@/data/mock-quran';
@@ -33,9 +33,10 @@ export const QuranReader = ({
   const [verses, setVerses] = useState<Verse[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const versesPerPage = 5;
+  const [totalSurahs, setTotalSurahs] = useState(114);
   
   useEffect(() => {
-    // In a real implementation, this would fetch data from an API
+    // Get the data from our expanded mock data
     const surahs = mockQuranData.surahs;
     const surah = surahs.find(s => s.number === currentSurah);
     
@@ -43,6 +44,9 @@ export const QuranReader = ({
       setVerses(surah.verses);
       setCurrentPage(1); // Reset to first page when changing Surah
     }
+    
+    // Set the total number of surahs based on the available data
+    setTotalSurahs(mockQuranData.surahs.length);
   }, [currentSurah]);
 
   const handlePrevSurah = () => {
@@ -52,7 +56,7 @@ export const QuranReader = ({
   };
 
   const handleNextSurah = () => {
-    if (currentSurah < 114) {
+    if (currentSurah < totalSurahs) {
       setCurrentSurah(currentSurah + 1);
     }
   };
@@ -79,6 +83,9 @@ export const QuranReader = ({
 
   const surahName = mockQuranData.surahs.find(s => s.number === currentSurah)?.name || '';
   const englishName = mockQuranData.surahs.find(s => s.number === currentSurah)?.englishName || '';
+
+  // Check if we have any verses to display
+  const hasVerses = verses && verses.length > 0;
 
   return (
     <div className="space-y-6">
@@ -114,10 +121,10 @@ export const QuranReader = ({
             <Button variant="outline" size="icon" onClick={handlePrevSurah} disabled={currentSurah <= 1}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <div className="w-16 text-center">
-              <span className="text-sm font-medium">{currentSurah}/114</span>
+            <div className="w-20 text-center">
+              <span className="text-sm font-medium">{currentSurah}/{totalSurahs}</span>
             </div>
-            <Button variant="outline" size="icon" onClick={handleNextSurah} disabled={currentSurah >= 114}>
+            <Button variant="outline" size="icon" onClick={handleNextSurah} disabled={currentSurah >= totalSurahs}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -126,66 +133,77 @@ export const QuranReader = ({
       
       <Card className="overflow-hidden border-slate-200 dark:border-slate-800 shadow-sm">
         <CardContent className="p-0">
-          <div className="bg-emerald-50 dark:bg-emerald-950/30 p-6 text-center border-b border-slate-200 dark:border-slate-800">
-            <p className="font-arabic text-3xl leading-loose text-slate-800 dark:text-slate-200 mb-2">
-              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-            </p>
-            <p className="text-slate-600 dark:text-slate-400">
-              In the name of Allah, the Most Gracious, the Most Merciful
-            </p>
-          </div>
+          {currentSurah !== 9 && ( // Surah At-Tawbah (9) is the only surah without Bismillah
+            <div className="bg-emerald-50 dark:bg-emerald-950/30 p-6 text-center border-b border-slate-200 dark:border-slate-800">
+              <p className="font-arabic text-3xl leading-loose text-slate-800 dark:text-slate-200 mb-2">
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+              </p>
+              <p className="text-slate-600 dark:text-slate-400">
+                In the name of Allah, the Most Gracious, the Most Merciful
+              </p>
+            </div>
+          )}
           
-          <div className="divide-y divide-slate-200 dark:divide-slate-800">
-            {currentVerses.map((verse) => (
-              <div 
-                key={verse.id}
-                className={cn(
-                  "p-6 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors cursor-pointer",
-                  currentVerse?.id === verse.id && "bg-slate-50 dark:bg-slate-900/50"
-                )}
-                onClick={() => onVerseSelect(verse)}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                    <span className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
-                      {verse.number}
-                    </span>
+          {hasVerses ? (
+            <div className="divide-y divide-slate-200 dark:divide-slate-800">
+              {currentVerses.map((verse) => (
+                <div 
+                  key={verse.id}
+                  className={cn(
+                    "p-6 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors cursor-pointer",
+                    currentVerse?.id === verse.id && "bg-slate-50 dark:bg-slate-900/50"
+                  )}
+                  onClick={() => onVerseSelect(verse)}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                      <span className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
+                        {verse.number}
+                      </span>
+                    </div>
+                    
+                    <div className="flex-1 space-y-4">
+                      <p className="font-arabic text-2xl leading-loose text-right text-slate-800 dark:text-slate-200">
+                        {verse.arabic}
+                      </p>
+                      <p className="text-slate-700 dark:text-slate-300">
+                        {verse.translations[translation]}
+                      </p>
+                    </div>
+                    
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onBookmark(verse);
+                      }}
+                      className={cn(
+                        "h-8 w-8",
+                        bookmarks.includes(verse.id) ? "text-amber-500 hover:text-amber-600" : "text-slate-400 hover:text-slate-500"
+                      )}
+                    >
+                      <Bookmark className={cn("h-4 w-4", bookmarks.includes(verse.id) && "fill-amber-500")} />
+                    </Button>
                   </div>
-                  
-                  <div className="flex-1 space-y-4">
-                    <p className="font-arabic text-2xl leading-loose text-right text-slate-800 dark:text-slate-200">
-                      {verse.arabic}
-                    </p>
-                    <p className="text-slate-700 dark:text-slate-300">
-                      {verse.translations[translation]}
-                    </p>
-                  </div>
-                  
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onBookmark(verse);
-                    }}
-                    className={cn(
-                      "h-8 w-8",
-                      bookmarks.includes(verse.id) ? "text-amber-500 hover:text-amber-600" : "text-slate-400 hover:text-slate-500"
-                    )}
-                  >
-                    <Bookmark className={cn("h-4 w-4", bookmarks.includes(verse.id) && "fill-amber-500")} />
-                  </Button>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-center">
+              <p className="text-slate-500">No verses found for this surah.</p>
+            </div>
+          )}
           
-          {verses.length > 0 && (
+          {hasVerses && totalPages > 1 && (
             <div className="p-4 border-t border-slate-200 dark:border-slate-800">
               <Pagination>
                 <PaginationContent>
                   <PaginationItem>
-                    <PaginationPrevious onClick={handlePrevPage} className={currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"} />
+                    <PaginationPrevious 
+                      onClick={handlePrevPage} 
+                      className={currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"} 
+                    />
                   </PaginationItem>
                   
                   <PaginationItem>
@@ -195,7 +213,10 @@ export const QuranReader = ({
                   </PaginationItem>
                   
                   <PaginationItem>
-                    <PaginationNext onClick={handleNextPage} className={currentPage === totalPages ? "cursor-not-allowed opacity-50" : "cursor-pointer"} />
+                    <PaginationNext 
+                      onClick={handleNextPage} 
+                      className={currentPage === totalPages ? "cursor-not-allowed opacity-50" : "cursor-pointer"} 
+                    />
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
