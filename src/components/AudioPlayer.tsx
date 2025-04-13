@@ -8,11 +8,12 @@ import { Play, Pause, SkipBack, SkipForward, Volume2 } from 'lucide-react';
 interface AudioPlayerProps {
   surah: number;
   verse: number;
+  qari: string;
+  onQariChange: (qari: string) => void;
 }
 
-export const AudioPlayer = ({ surah, verse }: AudioPlayerProps) => {
+export const AudioPlayer = ({ surah, verse, qari, onQariChange }: AudioPlayerProps) => {
   const [playing, setPlaying] = useState(false);
-  const [qari, setQari] = useState('alafasy');
   const [volume, setVolume] = useState([70]);
   
   const handlePlayPause = () => {
@@ -58,7 +59,7 @@ export const AudioPlayer = ({ surah, verse }: AudioPlayerProps) => {
         </div>
         
         <div className="flex-1 min-w-[120px]">
-          <Select defaultValue={qari} onValueChange={setQari}>
+          <Select value={qari} onValueChange={onQariChange}>
             <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Select Qari" />
             </SelectTrigger>

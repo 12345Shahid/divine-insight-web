@@ -15,6 +15,8 @@ interface QuranReaderProps {
   bookmarks: number[];
   onBookmark: (verse: Verse) => void;
   currentVerse: Verse | null;
+  translation: string;
+  onTranslationChange: (translation: string) => void;
 }
 
 export const QuranReader = ({
@@ -23,9 +25,10 @@ export const QuranReader = ({
   onVerseSelect,
   bookmarks,
   onBookmark,
-  currentVerse
+  currentVerse,
+  translation,
+  onTranslationChange
 }: QuranReaderProps) => {
-  const [translation, setTranslation] = useState('english');
   const [verses, setVerses] = useState<Verse[]>([]);
   
   useEffect(() => {
@@ -70,7 +73,7 @@ export const QuranReader = ({
         
         <div className="flex items-center gap-2 self-stretch md:self-auto">
           <div className="w-40">
-            <Select defaultValue="english" onValueChange={setTranslation}>
+            <Select value={translation} onValueChange={onTranslationChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Translation" />
               </SelectTrigger>

@@ -20,3 +20,16 @@ export interface Surah {
 export interface QuranData {
   surahs: Surah[];
 }
+
+export interface SearchResult {
+  verse: Verse;
+  matchType: 'text' | 'translation' | 'surah';
+  highlightedText?: string;
+}
+
+export interface UserPreferences {
+  translation: string;
+  theme: 'light' | 'dark' | 'system';
+  fontSize: 'small' | 'medium' | 'large';
+  audioQari: string;
+}
