@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Bookmark, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bookmark, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Verse } from '@/types/quran';
 import { mockQuranData } from '@/data/mock-quran';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 interface QuranReaderProps {
   currentSurah: number;
@@ -30,6 +31,8 @@ export const QuranReader = ({
   onTranslationChange
 }: QuranReaderProps) => {
   const [verses, setVerses] = useState<Verse[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const versesPerPage = 5;
   
   useEffect(() => {
     // In a real implementation, this would fetch data from an API
@@ -38,6 +41,7 @@ export const QuranReader = ({
     
     if (surah) {
       setVerses(surah.verses);
+      setCurrentPage(1); // Reset to first page when changing Surah
     }
   }, [currentSurah]);
 
@@ -50,6 +54,26 @@ export const QuranReader = ({
   const handleNextSurah = () => {
     if (currentSurah < 114) {
       setCurrentSurah(currentSurah + 1);
+    }
+  };
+
+  // Pagination logic
+  const indexOfLastVerse = currentPage * versesPerPage;
+  const indexOfFirstVerse = indexOfLastVerse - versesPerPage;
+  const currentVerses = verses.slice(indexOfFirstVerse, indexOfLastVerse);
+  const totalPages = Math.ceil(verses.length / versesPerPage);
+  
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo(0, 0);
+    }
+  };
+  
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -112,7 +136,7 @@ export const QuranReader = ({
           </div>
           
           <div className="divide-y divide-slate-200 dark:divide-slate-800">
-            {verses.map((verse) => (
+            {currentVerses.map((verse) => (
               <div 
                 key={verse.id}
                 className={cn(
@@ -155,6 +179,28 @@ export const QuranReader = ({
               </div>
             ))}
           </div>
+          
+          {verses.length > 0 && (
+            <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious onClick={handlePrevPage} className={currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"} />
+                  </PaginationItem>
+                  
+                  <PaginationItem>
+                    <span className="px-4 py-2">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                  </PaginationItem>
+                  
+                  <PaginationItem>
+                    <PaginationNext onClick={handleNextPage} className={currentPage === totalPages ? "cursor-not-allowed opacity-50" : "cursor-pointer"} />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

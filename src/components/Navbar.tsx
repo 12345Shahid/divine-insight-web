@@ -5,12 +5,13 @@ import { Moon, Sun, Bookmark } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from './Logo';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { usePreferences } from '@/hooks/use-preferences';
 
 const Navbar = () => {
   const { toast } = useToast();
   const { preferences, updatePreference } = usePreferences();
+  const location = useLocation();
   
   const toggleTheme = () => {
     const newTheme = preferences.theme === 'dark' ? 'light' : 'dark';
@@ -39,6 +40,8 @@ const Navbar = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [preferences.theme]);
+
+  const isHomePage = location.pathname === '/';
 
   return (
     <nav className="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
@@ -73,14 +76,16 @@ const Navbar = () => {
                     <Link to="/"><span>Home</span></Link>
                   </Button>
                   <Button asChild variant="ghost" className="w-full justify-start">
+                    <Link to="/read-quran"><span>Read Quran</span></Link>
+                  </Button>
+                  <Button asChild variant="ghost" className="w-full justify-start">
+                    <Link to="/bookmarks"><span>My Bookmarks</span></Link>
+                  </Button>
+                  <Button asChild variant="ghost" className="w-full justify-start">
                     <Link to="/about"><span>About</span></Link>
                   </Button>
                   <Button asChild variant="ghost" className="w-full justify-start">
                     <Link to="/support"><span>Support</span></Link>
-                  </Button>
-                  <Button variant="ghost" className="w-full justify-start">
-                    <Bookmark className="mr-2 h-4 w-4" />
-                    My Bookmarks
                   </Button>
                 </div>
               </div>
@@ -90,6 +95,18 @@ const Navbar = () => {
           <Link to="/">
             <Logo />
           </Link>
+          
+          <div className="hidden md:flex items-center ml-6 space-x-4">
+            <Button asChild variant="ghost">
+              <Link to="/read-quran">Read Quran</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link to="/bookmarks" className="flex items-center">
+                <Bookmark className="mr-1 h-4 w-4" />
+                Bookmarks
+              </Link>
+            </Button>
+          </div>
         </div>
         
         <div className="flex items-center gap-2">
@@ -99,12 +116,12 @@ const Navbar = () => {
             <span className="sr-only">Toggle theme</span>
           </Button>
           
-          <Button asChild variant="outline">
-            <Link to="/support">Support</Link>
+          <Button asChild variant={isHomePage ? "outline" : "ghost"} className="hidden md:inline-flex">
+            <Link to="/about">About</Link>
           </Button>
           
-          <Button asChild variant="ghost" className="hidden md:inline-flex">
-            <Link to="/about">About</Link>
+          <Button asChild variant={isHomePage ? "default" : "outline"}>
+            <Link to="/support">Support</Link>
           </Button>
         </div>
       </div>
