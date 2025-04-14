@@ -1,13 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { X, BookOpen, BookText, Sparkles } from 'lucide-react';
+import { X, BookOpen, BookText, Sparkles, Loader2 } from 'lucide-react';
 import { Verse } from '@/types/quran';
-import { mockTafsir, mockHadith } from '@/data/mock-insights';
+import { fetchTafsir } from '@/services/quranApi';
+import { mockHadith } from '@/data/mock-insights';
 
 interface VerseExplorerProps {
   verse: Verse | null;
@@ -17,14 +18,31 @@ interface VerseExplorerProps {
 
 export const VerseExplorer = ({ verse, open, onClose }: VerseExplorerProps) => {
   const [activeTab, setActiveTab] = useState('tafsir');
+  const [tafsir, setTafsir] = useState<string | null>(null);
+  const [loadingTafsir, setLoadingTafsir] = useState(false);
+  
+  useEffect(() => {
+    const loadTafsir = async () => {
+      if (!verse) return;
+      
+      setLoadingTafsir(true);
+      try {
+        const tafsirText = await fetchTafsir(verse.surah, verse.number);
+        setTafsir(tafsirText);
+      } catch (error) {
+        console.error("Error fetching tafsir:", error);
+        setTafsir("No Tafseer available for this verse.");
+      } finally {
+        setLoadingTafsir(false);
+      }
+    };
+    
+    if (open && verse) {
+      loadTafsir();
+    }
+  }, [verse, open]);
   
   if (!verse) return null;
-  
-  const tafsir = mockTafsir[verse.id] || { 
-    short: "No tafsir available for this verse.",
-    ibn_kathir: "No tafsir from Ibn Kathir available for this verse.",
-    maariful: "No tafsir from Ma'ariful Quran available for this verse."
-  };
   
   const hadith = mockHadith[verse.id] || [];
   
@@ -79,34 +97,22 @@ export const VerseExplorer = ({ verse, open, onClose }: VerseExplorerProps) => {
           </TabsList>
           
           <TabsContent value="tafsir" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Brief Explanation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>{tafsir.short}</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Ibn Kathir</CardTitle>
-                <CardDescription>Classical Sunni tafsir by Ibn Kathir</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>{tafsir.ibn_kathir}</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Ma'ariful Quran</CardTitle>
-                <CardDescription>Comprehensive tafsir by Mufti Muhammad Shafi Usmani</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>{tafsir.maariful}</p>
-              </CardContent>
-            </Card>
+            {loadingTafsir ? (
+              <div className="flex items-center justify-center p-12">
+                <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
+                <span className="ml-2 text-slate-600 dark:text-slate-300">Loading tafsir...</span>
+              </div>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Tafsir - Maududi</CardTitle>
+                  <CardDescription>Comprehensive tafsir by Maulana Maududi</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>{tafsir}</p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
           
           <TabsContent value="hadith" className="space-y-4">

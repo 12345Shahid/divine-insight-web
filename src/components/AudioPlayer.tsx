@@ -1,9 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, Loader2 } from 'lucide-react';
+import { getAudioUrl } from '@/services/quranApi';
 
 interface AudioPlayerProps {
   surah: number;
@@ -15,22 +16,105 @@ interface AudioPlayerProps {
 export const AudioPlayer = ({ surah, verse, qari, onQariChange }: AudioPlayerProps) => {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState([70]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  const audioRef = useRef<HTMLAudioElement>(null);
+  
+  const audioUrl = getAudioUrl(surah, verse, qari);
   
   const handlePlayPause = () => {
-    // In a real implementation, this would control audio playback
-    setPlaying(!playing);
+    if (audioRef.current) {
+      if (playing) {
+        audioRef.current.pause();
+      } else {
+        setLoading(true);
+        audioRef.current.play().catch(err => {
+          console.error("Error playing audio:", err);
+          setError("Could not play audio. Please try again.");
+          setLoading(false);
+        });
+      }
+    }
   };
 
   const handlePrev = () => {
-    // In a real implementation, this would play the previous verse
+    // Go to previous verse - would need to be implemented with parent component
+    // For now, just restart the current audio
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(console.error);
+    }
   };
 
   const handleNext = () => {
-    // In a real implementation, this would play the next verse
+    // Go to next verse - would need to be implemented with parent component
   };
   
-  // In a real app, this would use the actual audio from the API
-  const audioUrl = `https://everyayah.com/data/${qari}/${surah.toString().padStart(3, '0')}${verse.toString().padStart(3, '0')}.mp3`;
+  const handleVolumeChange = (value: number[]) => {
+    setVolume(value);
+    if (audioRef.current) {
+      audioRef.current.volume = value[0] / 100;
+    }
+  };
+  
+  useEffect(() => {
+    // Update audio src when surah, verse, or qari changes
+    if (audioRef.current) {
+      setPlaying(false);
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setError(null);
+    }
+  }, [surah, verse, qari]);
+  
+  // Handle audio events
+  useEffect(() => {
+    const audio = audioRef.current;
+    
+    if (!audio) return;
+    
+    const onLoadedData = () => {
+      setLoading(false);
+      setError(null);
+      audio.volume = volume[0] / 100;
+    };
+    
+    const onPlaying = () => {
+      setPlaying(true);
+      setLoading(false);
+    };
+    
+    const onPause = () => {
+      setPlaying(false);
+    };
+    
+    const onEnded = () => {
+      setPlaying(false);
+    };
+    
+    const onError = () => {
+      setError("Error loading audio. Please try another verse or qari.");
+      setPlaying(false);
+      setLoading(false);
+    };
+    
+    // Add event listeners
+    audio.addEventListener('loadeddata', onLoadedData);
+    audio.addEventListener('playing', onPlaying);
+    audio.addEventListener('pause', onPause);
+    audio.addEventListener('ended', onEnded);
+    audio.addEventListener('error', onError);
+    
+    // Cleanup
+    return () => {
+      audio.removeEventListener('loadeddata', onLoadedData);
+      audio.removeEventListener('playing', onPlaying);
+      audio.removeEventListener('pause', onPause);
+      audio.removeEventListener('ended', onEnded);
+      audio.removeEventListener('error', onError);
+    };
+  }, [volume]);
 
   return (
     <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-4 shadow-sm">
@@ -45,8 +129,11 @@ export const AudioPlayer = ({ surah, verse, qari, onQariChange }: AudioPlayerPro
             size="icon" 
             className="h-10 w-10 rounded-full bg-emerald-600 hover:bg-emerald-700"
             onClick={handlePlayPause}
+            disabled={loading || !!error}
           >
-            {playing ? (
+            {loading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : playing ? (
               <Pause className="h-5 w-5" />
             ) : (
               <Play className="h-5 w-5 ml-0.5" />
@@ -75,17 +162,23 @@ export const AudioPlayer = ({ surah, verse, qari, onQariChange }: AudioPlayerPro
         <div className="flex items-center gap-2 ml-auto">
           <Volume2 className="h-4 w-4 text-slate-500" />
           <Slider
-            defaultValue={volume}
+            value={volume}
             max={100}
             step={1}
             className="w-24"
-            onValueChange={setVolume}
+            onValueChange={handleVolumeChange}
           />
         </div>
       </div>
       
-      {/* Hidden audio element (would be controlled via JavaScript in a real implementation) */}
-      <audio src={audioUrl} className="hidden" />
+      {error && (
+        <div className="mt-2 text-xs text-red-500">
+          {error}
+        </div>
+      )}
+      
+      {/* Hidden audio element */}
+      <audio ref={audioRef} src={audioUrl} preload="metadata" className="hidden" />
     </div>
   );
 };
