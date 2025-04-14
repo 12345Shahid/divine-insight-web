@@ -1,8 +1,4 @@
-
 import { QuranData } from "@/types/quran";
-
-// This is a simplified mock of the Quran data for development purposes
-// In a real application, this would be fetched from an API
 
 export const mockQuranData: QuranData = {
   surahs: [
@@ -252,7 +248,7 @@ export const mockQuranData: QuranData = {
           id: 18,
           surah: 5,
           number: 1,
-          arabic: "يَا أَيُّهَا الَّذِينَ آمَنُوا أَوْفُوا بِالْعُقُودِ ۚ أُحِلَّتْ لَكُمْ بَهِيمَةُ الْأَنْعَامِ إِلَّا مَا يُتْلَىٰ عَلَيْكُمْ غَيْرَ مُحِلِّي الصَّيْدِ وَأَنْتُمْ حُرُمٌ ۗ إِنَّ اللَّهَ يَحْكُمُ مَا يُرِيدُ",
+          arabic: "يَا أَيُّهَا الَّذِينَ آمَنُوا أَوْفُوا بِالْعُقُودِ ۖ أُحِلَّتْ لَكُمْ بَهِيمَةُ الْأَنْعَامِ إِلَّا مَا يُتْلَىٰ عَلَيْكُمْ غَيْرَ مُحِلِّي الصَّيْدِ وَأَنْتُمْ حُرُمٌ ۗ إِنَّ اللَّهَ يَحْكُمُ مَا يُرِيدُ",
           translations: {
             english: "O you who have believed, fulfill [all] contracts. Lawful for you are the animals of grazing livestock except for that which is recited to you [in this Qur'an] - hunting not being permitted while you are in the state of ihram. Indeed, Allah ordains what He intends.",
             urdu: "اے ایمان والو! عہدوں کو پورا کرو۔ تمہارے لیے چوپایے حلال کیے گئے ہیں سوائے ان کے جن کا ذکر تم پر پڑھا جاتا ہے، بشرطیکہ تم شکار کو حلال نہ سمجھو جب کہ تم حالت احرام میں ہو۔ بیشک اللہ جو چاہتا ہے حکم دیتا ہے",
@@ -308,8 +304,8 @@ export const mockQuranData: QuranData = {
           translations: {
             english: "Say, \"I seek refuge in the Lord of mankind,",
             urdu: "کہو میں پناہ مانگتا ہوں انسانوں کے رب کی",
-            indonesian: "Katakanlah, "Aku berlindung kepada Tuhannya manusia,",
-            french: "Dis : «Je cherche protection auprès du Seigneur des hommes."
+            indonesian: "Katakanlah, \"Aku berlindung kepada Tuhannya manusia,",
+            french: "Dis : «Je cherche protection auprès du Seigneur des hommes.»"
           }
         },
         {
@@ -368,7 +364,7 @@ export const mockQuranData: QuranData = {
           translations: {
             english: "From among the jinn and mankind.\"",
             urdu: "جنوں میں سے اور انسانوں میں سے",
-            indonesian: "dari (golongan) jin dan manusia."",
+            indonesian: "dari (golongan) jin dan manusia.\"",
             french: "qu'il soit un djinn, ou un être humain»."
           }
         }
