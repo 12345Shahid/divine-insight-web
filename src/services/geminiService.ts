@@ -1,9 +1,7 @@
 
-import { toast } from "@/hooks/use-toast";
-
 // API key for Gemini
 const GEMINI_API_KEY = "AIzaSyDFX8oR3jKgLdKnja6JEPPYTBPwhxw_7r0";
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent";
 
 interface GeminiResponse {
   candidates: Array<{
@@ -109,11 +107,6 @@ export const generateAiInsights = async (verse: { surah: number; number: number;
     }
   } catch (error) {
     console.error('Error generating AI insights:', error);
-    toast({
-      title: "AI Insights Error",
-      description: "Could not generate AI insights for this verse.",
-      variant: "destructive"
-    });
     return {
       historicalContext: "Could not retrieve historical context at this time.",
       reflection: "Could not generate reflection at this time.",
