@@ -5,10 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { X, BookOpen, BookText, Sparkles, Loader2 } from 'lucide-react';
+import { X, BookOpen, BookText, Sparkles, Loader2, MessageCircle } from 'lucide-react';
 import { Verse } from '@/types/quran';
 import { fetchTafsir } from '@/services/quranApi';
 import { mockHadith } from '@/data/mock-insights';
+import { generateAiInsights, AiInsights } from '@/services/geminiService';
+import { AiInsightChat } from '@/components/AiInsightChat';
 
 interface VerseExplorerProps {
   verse: Verse | null;
@@ -18,8 +20,11 @@ interface VerseExplorerProps {
 
 export const VerseExplorer = ({ verse, open, onClose }: VerseExplorerProps) => {
   const [activeTab, setActiveTab] = useState('tafsir');
+  const [aiActiveView, setAiActiveView] = useState<'insights' | 'chat'>('insights');
   const [tafsir, setTafsir] = useState<string | null>(null);
   const [loadingTafsir, setLoadingTafsir] = useState(false);
+  const [aiInsights, setAiInsights] = useState<AiInsights | null>(null);
+  const [loadingAiInsights, setLoadingAiInsights] = useState(false);
   
   useEffect(() => {
     const loadTafsir = async () => {
@@ -41,16 +46,35 @@ export const VerseExplorer = ({ verse, open, onClose }: VerseExplorerProps) => {
       loadTafsir();
     }
   }, [verse, open]);
+
+  useEffect(() => {
+    const loadAiInsights = async () => {
+      if (!verse) return;
+      
+      setLoadingAiInsights(true);
+      try {
+        const insights = await generateAiInsights(verse);
+        setAiInsights(insights);
+      } catch (error) {
+        console.error("Error generating AI insights:", error);
+        setAiInsights({
+          historicalContext: "Could not retrieve historical context at this time.",
+          reflection: "Could not generate reflection at this time.", 
+          application: "Could not generate application insights at this time."
+        });
+      } finally {
+        setLoadingAiInsights(false);
+      }
+    };
+    
+    if (open && verse && activeTab === 'ai') {
+      loadAiInsights();
+    }
+  }, [verse, open, activeTab]);
   
   if (!verse) return null;
   
   const hadith = mockHadith[verse.id] || [];
-  
-  const aiInsights = {
-    context: "This verse was revealed in Medina during a period when the Muslim community was facing challenges from both external threats and internal doubts.",
-    reflection: "The verse invites believers to reflect on the nature of faith and how it manifests in our actions, especially during times of difficulty.",
-    application: "Consider how you can apply the principles mentioned in this verse to your daily interactions and decisions."
-  };
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
@@ -140,42 +164,91 @@ export const VerseExplorer = ({ verse, open, onClose }: VerseExplorerProps) => {
           </TabsContent>
           
           <TabsContent value="ai" className="space-y-4">
-            <Card className="border-2 border-emerald-200 dark:border-emerald-900">
-              <CardHeader className="bg-emerald-50 dark:bg-emerald-950/30">
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                  AI-Generated Insights
-                </CardTitle>
-                <CardDescription>
-                  Powered by AI to help understand this verse (for educational purposes only)
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">Historical Context</h4>
-                    <p className="text-slate-700 dark:text-slate-300">{aiInsights.context}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">Reflection Point</h4>
-                    <p className="text-slate-700 dark:text-slate-300">{aiInsights.reflection}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">Application</h4>
-                    <p className="text-slate-700 dark:text-slate-300">{aiInsights.application}</p>
-                  </div>
-                  
-                  <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded-md mt-4">
-                    <p className="text-sm text-amber-700 dark:text-amber-400">
-                      Note: These AI insights are meant to supplement, not replace, traditional scholarly interpretations. 
-                      Always verify information with trusted Islamic sources.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="flex justify-between mb-2">
+              <Button 
+                variant={aiActiveView === 'insights' ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setAiActiveView('insights')}
+                className="flex items-center gap-1.5"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>AI Insights</span>
+              </Button>
+              <Button 
+                variant={aiActiveView === 'chat' ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setAiActiveView('chat')}
+                className="flex items-center gap-1.5"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>Ask About Verse</span>
+              </Button>
+            </div>
+            
+            {aiActiveView === 'insights' ? (
+              <Card className="border-2 border-emerald-200 dark:border-emerald-900">
+                <CardHeader className="bg-emerald-50 dark:bg-emerald-950/30">
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                    AI-Generated Insights
+                  </CardTitle>
+                  <CardDescription>
+                    Powered by AI to help understand this verse (for educational purposes only)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  {loadingAiInsights ? (
+                    <div className="flex items-center justify-center p-12">
+                      <Loader2 className="h-6 w-6 animate-spin text-emerald-600" />
+                      <span className="ml-2 text-slate-600 dark:text-slate-300">Generating insights...</span>
+                    </div>
+                  ) : aiInsights ? (
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">Historical Context</h4>
+                        <p className="text-slate-700 dark:text-slate-300">{aiInsights.historicalContext}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">Reflection Point</h4>
+                        <p className="text-slate-700 dark:text-slate-300">{aiInsights.reflection}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">Application</h4>
+                        <p className="text-slate-700 dark:text-slate-300">{aiInsights.application}</p>
+                      </div>
+                      
+                      <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded-md mt-4">
+                        <p className="text-sm text-amber-700 dark:text-amber-400">
+                          Note: These AI insights are meant to supplement, not replace, traditional scholarly interpretations. 
+                          Always verify information with trusted Islamic sources.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-slate-500 dark:text-slate-400">Could not generate AI insights at this time.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-2 border-emerald-200 dark:border-emerald-900">
+                <CardHeader className="bg-emerald-50 dark:bg-emerald-950/30">
+                  <CardTitle className="flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                    Ask About This Verse
+                  </CardTitle>
+                  <CardDescription>
+                    Chat with AI about Surah {verse.surah}, Verse {verse.number} or related Islamic topics
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <AiInsightChat verse={verse} />
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
       </SheetContent>
