@@ -17,3 +17,15 @@ export interface GeminiRequest {
     }>;
   }>;
 }
+
+export interface AiInsights {
+  historicalContext: string;
+  reflection: string;
+  application: string;
+}
+
+export interface ChatMessage {
+  role: 'user' | 'ai';
+  content: string;
+  timestamp: Date;
+}
