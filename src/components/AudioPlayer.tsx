@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, SkipBack, SkipForward, Volume2, Loader2 } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, Loader2, Headphones } from 'lucide-react';
 import { getAudioUrl } from '@/services/quranApi';
 
 interface AudioPlayerProps {
@@ -169,6 +169,12 @@ export const AudioPlayer = ({ surah, verse, qari, onQariChange }: AudioPlayerPro
             onValueChange={handleVolumeChange}
           />
         </div>
+      </div>
+      
+      {/* New guidance text section */}
+      <div className="mt-4 p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-md flex items-center gap-3 text-sm text-emerald-800 dark:text-emerald-300">
+        <Headphones className="h-5 w-5" />
+        <p>Tip: Select a verse, then use the audio player to listen to its recitation.</p>
       </div>
       
       {error && (
