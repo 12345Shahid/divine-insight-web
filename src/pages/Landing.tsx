@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -39,17 +38,6 @@ const Landing = () => {
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature 1 */}
-              <div className="rounded-lg p-6 bg-slate-50 dark:bg-slate-900 shadow-sm">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-4">
-                  <BookOpen className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Multiple Translations</h3>
-                <p className="text-slate-600 dark:text-slate-400">
-                  Access the Quran in multiple languages including English, Urdu, Indonesian, and French.
-                </p>
-              </div>
-              
               {/* Feature 2 */}
               <div className="rounded-lg p-6 bg-slate-50 dark:bg-slate-900 shadow-sm">
                 <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-4">

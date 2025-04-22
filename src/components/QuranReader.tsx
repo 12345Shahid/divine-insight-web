@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
@@ -81,7 +80,6 @@ export const QuranReader = ({
     }
   };
 
-  // Pagination logic
   const indexOfLastVerse = currentPage * versesPerPage;
   const indexOfFirstVerse = indexOfLastVerse - versesPerPage;
   const currentVerses = verses.slice(indexOfFirstVerse, indexOfLastVerse);
@@ -101,7 +99,6 @@ export const QuranReader = ({
     }
   };
 
-  // Check if we have any verses to display
   const hasVerses = verses && verses.length > 0;
 
   return (
@@ -127,9 +124,6 @@ export const QuranReader = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="english">English (Sahih)</SelectItem>
-                <SelectItem value="urdu">Urdu</SelectItem>
-                <SelectItem value="indonesian">Indonesian</SelectItem>
-                <SelectItem value="french">French</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -164,7 +158,7 @@ export const QuranReader = ({
             </div>
           ) : (
             <>
-              {currentSurah !== 9 && ( // Surah At-Tawbah (9) is the only surah without Bismillah
+              {currentSurah !== 9 && (
                 <div className="bg-emerald-50 dark:bg-emerald-950/30 p-6 text-center border-b border-slate-200 dark:border-slate-800">
                   <p className="font-arabic text-3xl leading-loose text-slate-800 dark:text-slate-200 mb-2">
                     بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
