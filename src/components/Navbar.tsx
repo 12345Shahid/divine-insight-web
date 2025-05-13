@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Moon, Sun, Bookmark } from 'lucide-react';
+import { Moon, Sun, Bookmark, Heart } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from './Logo';
@@ -87,6 +87,12 @@ const Navbar = () => {
                   <Button asChild variant="ghost" className="w-full justify-start">
                     <Link to="/support"><span>Support</span></Link>
                   </Button>
+                  <Button asChild variant="ghost" className="w-full justify-start">
+                    <Link to="/emergency-donation" className="flex items-center">
+                      <Heart className="mr-2 h-4 w-4 text-red-500" />
+                      <span>Donate</span>
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </SheetContent>
@@ -104,6 +110,12 @@ const Navbar = () => {
               <Link to="/bookmarks" className="flex items-center">
                 <Bookmark className="mr-1 h-4 w-4" />
                 Bookmarks
+              </Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link to="/emergency-donation" className="flex items-center">
+                <Heart className="mr-1 h-4 w-4 text-red-500" />
+                Donate
               </Link>
             </Button>
           </div>
