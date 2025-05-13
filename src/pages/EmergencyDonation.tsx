@@ -39,7 +39,7 @@ const EmergencyDonation = () => {
                 and QuranIQ Application Improvement. 10% will be allocated for application maintenance and development.
               </p>
               <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
-                <p className="font-medium">Donation Account Number:</p>
+                <p className="font-medium">Bikash Account Number:</p>
                 <p className="text-lg font-mono mt-1">9999-8888-7777-6666</p>
               </div>
               <div className="flex mt-4">
@@ -85,7 +85,7 @@ const EmergencyDonation = () => {
                   Your donation provides essential aid to Palestinians in need including medical supplies and food.
                 </p>
                 <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
-                  <p className="font-medium">Account Number:</p>
+                  <p className="font-medium">Bikash Account Number:</p>
                   <p className="text-lg font-mono mt-1">1234-5678-9012-3456</p>
                 </div>
                 <div className="flex mt-4">
@@ -109,7 +109,7 @@ const EmergencyDonation = () => {
                   Support mosque construction, Islamic education, and other community services worldwide.
                 </p>
                 <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
-                  <p className="font-medium">Account Number:</p>
+                  <p className="font-medium">Bikash Account Number:</p>
                   <p className="text-lg font-mono mt-1">3456-7890-1234-5678</p>
                 </div>
                 <div className="flex mt-4">
@@ -133,7 +133,7 @@ const EmergencyDonation = () => {
                   Help enhance this application with new features, better translations, and improved resources.
                 </p>
                 <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
-                  <p className="font-medium">Account Number:</p>
+                  <p className="font-medium">Bikash Account Number:</p>
                   <p className="text-lg font-mono mt-1">5678-9012-3456-7890</p>
                 </div>
                 <div className="flex mt-4">
