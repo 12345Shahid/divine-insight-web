@@ -90,7 +90,7 @@ const Navbar = () => {
                   <Button asChild variant="ghost" className="w-full justify-start">
                     <Link to="/emergency-donation" className="flex items-center">
                       <Heart className="mr-2 h-4 w-4 text-red-500" />
-                      <span>Donate</span>
+                      <span>Emergency Donation</span>
                     </Link>
                   </Button>
                 </div>
@@ -115,7 +115,7 @@ const Navbar = () => {
             <Button asChild variant="ghost">
               <Link to="/emergency-donation" className="flex items-center">
                 <Heart className="mr-1 h-4 w-4 text-red-500" />
-                Donate
+                Emergency Donation
               </Link>
             </Button>
           </div>

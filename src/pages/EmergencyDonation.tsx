@@ -24,13 +24,13 @@ const EmergencyDonation = () => {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-center mb-3 text-emerald-700 dark:text-emerald-500">Emergency Donation</h1>
           <p className="text-lg text-center text-slate-600 dark:text-slate-400 mb-8">
-            Support our causes and help make a difference
+            Support our causes and help make a difference. We need emergency donations especially for Palestine.
           </p>
           
-          {/* Combined Donation Option */}
+          {/* Donation Option (previously Combined Donation) */}
           <Card className="mb-8 border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20">
             <CardHeader>
-              <CardTitle className="text-center text-emerald-800 dark:text-emerald-300">Combined Donation</CardTitle>
+              <CardTitle className="text-center text-emerald-800 dark:text-emerald-300">Donation</CardTitle>
               <CardDescription className="text-center">Support all our causes with a single donation</CardDescription>
             </CardHeader>
             <CardContent>
@@ -39,7 +39,7 @@ const EmergencyDonation = () => {
                 and QuranIQ Application Improvement. 10% will be allocated for application maintenance and development.
               </p>
               <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
-                <p className="font-medium">Combined Donation Account Number:</p>
+                <p className="font-medium">Donation Account Number:</p>
                 <p className="text-lg font-mono mt-1">9999-8888-7777-6666</p>
               </div>
               <div className="flex mt-4">
@@ -70,7 +70,7 @@ const EmergencyDonation = () => {
             </CardContent>
           </Card>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {/* Palestine Relief */}
             <Card className="border-emerald-200 dark:border-emerald-800">
               <CardHeader>
@@ -81,23 +81,16 @@ const EmergencyDonation = () => {
                 <CardDescription className="text-center">Support humanitarian aid</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="palestine-full">100% to Palestine</Label>
-                    <div className="flex mt-1">
-                      <Input id="palestine-full" placeholder="Amount" type="number" defaultValue="50" />
-                      <Button onClick={() => handleDonate("Palestine (100%)")} className="ml-2">Donate</Button>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">Account: 1234-5678-9012-3456</p>
-                  </div>
-                  <div>
-                    <Label htmlFor="palestine-shared">90% Palestine, 10% QuranIQ</Label>
-                    <div className="flex mt-1">
-                      <Input id="palestine-shared" placeholder="Amount" type="number" defaultValue="50" />
-                      <Button onClick={() => handleDonate("Palestine (90%)")} className="ml-2">Donate</Button>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">Account: 2345-6789-0123-4567</p>
-                  </div>
+                <p className="mb-4 text-slate-700 dark:text-slate-300">
+                  Your donation provides essential aid to Palestinians in need including medical supplies and food.
+                </p>
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
+                  <p className="font-medium">Account Number:</p>
+                  <p className="text-lg font-mono mt-1">1234-5678-9012-3456</p>
+                </div>
+                <div className="flex mt-4">
+                  <Input id="palestine" placeholder="Amount" type="number" defaultValue="50" />
+                  <Button onClick={() => handleDonate("Palestine Relief")} className="ml-2">Donate</Button>
                 </div>
               </CardContent>
             </Card>
@@ -112,23 +105,16 @@ const EmergencyDonation = () => {
                 <CardDescription className="text-center">Support Islamic causes</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="islamic-full">100% to Islamic Deeds</Label>
-                    <div className="flex mt-1">
-                      <Input id="islamic-full" placeholder="Amount" type="number" defaultValue="50" />
-                      <Button onClick={() => handleDonate("Islamic Deeds (100%)")} className="ml-2">Donate</Button>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">Account: 3456-7890-1234-5678</p>
-                  </div>
-                  <div>
-                    <Label htmlFor="islamic-shared">90% Islamic Deeds, 10% QuranIQ</Label>
-                    <div className="flex mt-1">
-                      <Input id="islamic-shared" placeholder="Amount" type="number" defaultValue="50" />
-                      <Button onClick={() => handleDonate("Islamic Deeds (90%)")} className="ml-2">Donate</Button>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">Account: 4567-8901-2345-6789</p>
-                  </div>
+                <p className="mb-4 text-slate-700 dark:text-slate-300">
+                  Support mosque construction, Islamic education, and other community services worldwide.
+                </p>
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
+                  <p className="font-medium">Account Number:</p>
+                  <p className="text-lg font-mono mt-1">3456-7890-1234-5678</p>
+                </div>
+                <div className="flex mt-4">
+                  <Input id="islamic" placeholder="Amount" type="number" defaultValue="50" />
+                  <Button onClick={() => handleDonate("Islamic Deeds")} className="ml-2">Donate</Button>
                 </div>
               </CardContent>
             </Card>
@@ -143,15 +129,16 @@ const EmergencyDonation = () => {
                 <CardDescription className="text-center">Support our application</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="quraniq">100% to QuranIQ Development</Label>
-                    <div className="flex mt-1">
-                      <Input id="quraniq" placeholder="Amount" type="number" defaultValue="50" />
-                      <Button onClick={() => handleDonate("QuranIQ Development")} className="ml-2">Donate</Button>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">Account: 5678-9012-3456-7890</p>
-                  </div>
+                <p className="mb-4 text-slate-700 dark:text-slate-300">
+                  Help enhance this application with new features, better translations, and improved resources.
+                </p>
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
+                  <p className="font-medium">Account Number:</p>
+                  <p className="text-lg font-mono mt-1">5678-9012-3456-7890</p>
+                </div>
+                <div className="flex mt-4">
+                  <Input id="quraniq" placeholder="Amount" type="number" defaultValue="50" />
+                  <Button onClick={() => handleDonate("QuranIQ Development")} className="ml-2">Donate</Button>
                 </div>
               </CardContent>
             </Card>
