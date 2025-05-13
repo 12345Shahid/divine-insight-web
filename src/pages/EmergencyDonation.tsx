@@ -27,6 +27,32 @@ const EmergencyDonation = () => {
             Support our causes and help make a difference
           </p>
           
+          {/* Combined Donation Option */}
+          <Card className="mb-8 border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20">
+            <CardHeader>
+              <CardTitle className="text-center text-emerald-800 dark:text-emerald-300">Combined Donation</CardTitle>
+              <CardDescription className="text-center">Support all our causes with a single donation</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-slate-700 dark:text-slate-300">
+                Donate to this account and your contribution will be distributed across Palestine Relief, Islamic Deeds, 
+                and QuranIQ Application Improvement. 10% will be allocated for application maintenance and development.
+              </p>
+              <div className="bg-white dark:bg-slate-800 p-4 rounded-lg mb-4">
+                <p className="font-medium">Combined Donation Account Number:</p>
+                <p className="text-lg font-mono mt-1">9999-8888-7777-6666</p>
+              </div>
+              <div className="flex mt-4">
+                <Input id="combined" placeholder="Amount" type="number" defaultValue="100" />
+                <Button onClick={() => handleDonate("Combined Causes")} className="ml-2">Donate</Button>
+              </div>
+              <p className="text-sm text-muted-foreground mt-2">
+                Distribution: We will distribute your donation as needed among all causes with at least 10% supporting 
+                the QuranIQ application and its developers.
+              </p>
+            </CardContent>
+          </Card>
+          
           {/* Important Notice Card */}
           <Card className="mb-10 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20">
             <CardHeader>
