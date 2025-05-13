@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Heart, Mosque, Building, PalmtreeIcon } from 'lucide-react';
+import { Heart, Building, PalmtreeIcon, BookOpen } from 'lucide-react';
 
 const EmergencyDonation = () => {
   const { toast } = useToast();
@@ -80,7 +80,7 @@ const EmergencyDonation = () => {
             <Card className="border-emerald-200 dark:border-emerald-800">
               <CardHeader>
                 <CardTitle className="flex items-center justify-center gap-2">
-                  <Mosque className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                  <BookOpen className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                   Islamic Deeds
                 </CardTitle>
                 <CardDescription className="text-center">Support Islamic causes</CardDescription>
